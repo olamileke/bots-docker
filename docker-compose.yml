@@ -23,7 +23,7 @@ services:
   factsonfactsbot:
     container_name: factsonfactsbot
     build:
-      - context: ./factsonfactsbot
+      context: ./factsonfactsbot
     volumes:
       - ./factsonfactsbot:/factsonfactsbot
     networks:
@@ -31,7 +31,7 @@ services:
   newsondemandbot:
     container_name: newsondemandbot
     build:
-      - context: ./newsondemandbot
+      context: ./newsondemandbot
     volumes:
       - ./newsondemandbot:/newsondemandbot
     networks:
@@ -39,7 +39,7 @@ services:
   politicalnewsbot:
     container_name: politicalnewsbot
     build:
-      - context: ./politicalnewsbot
+      context: ./politicalnewsbot
     volumes:
       - ./politicalnewsbot:/politicalnewsbot
     networks:
