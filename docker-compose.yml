@@ -5,9 +5,9 @@ services:
     build:
       context: ./nginx
     volumes:
-      ./factsonfactsbot:/var/www/vhosts/factsonfactsbot
-      ./newsondemandbot:/var/www/vhosts/newsondemandbot
-      ./politicalnewsbot:/var/www/vhosts/politicalnewsbot
+      - ./factsonfactsbot:/var/www/vhosts/factsonfactsbot
+      - ./newsondemandbot:/var/www/vhosts/newsondemandbot
+      - ./politicalnewsbot:/var/www/vhosts/politicalnewsbot
     ports:
       - "80:80"
       - "443:443"
@@ -20,7 +20,7 @@ services:
   factsonfactsbot:
     container_name: factsonfactsbot
     build:
-      - context: ./factsonfactsbot
+      context: ./factsonfactsbot
     volumes:
       - ./factsonfactsbot:/factsonfactsbot
     networks:
@@ -28,7 +28,7 @@ services:
   newsondemandbot:
     container_name: newsondemandbot
     build:
-      - context: ./newsondemandbot
+      context: ./newsondemandbot
     volumes:
       - ./newsondemandbot:/newsondemandbot
     networks:
@@ -36,7 +36,7 @@ services:
   politicalnewsbot:
     container_name: politicalnewsbot
     build:
-      - context: ./politicalnewsbot
+      context: ./politicalnewsbot
     volumes:
       - ./politicalnewsbot:/politicalnewsbot
     networks:
