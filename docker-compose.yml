@@ -8,6 +8,9 @@ services:
       ./factsonfactsbot:/var/www/vhosts/factsonfactsbot
       ./newsondemandbot:/var/www/vhosts/newsondemandbot
       ./politicalnewsbot:/var/www/vhosts/politicalnewsbot
+      ./certbot-etc:/etc/letsencrypt
+      ./certbot-var:/var/lib/letsencrypt
+      ./dhparam:/etc/ssl/certs
     ports:
       - "80:80"
       - "443:443"
