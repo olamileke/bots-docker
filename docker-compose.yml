@@ -1,0 +1,47 @@
+version: '3'
+services:
+  webserver:
+    container_name: webserver
+    build:
+      context: ./nginx
+    volumes:
+      ./factsonfactsbot:/var/www/vhosts/factsonfactsbot
+      ./newsondemandbot:/var/www/vhosts/newsondemandbot
+      ./politicalnewsbot:/var/www/vhosts/politicalnewsbot
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+     - factsonfactsbot
+     - newsondemandbot
+     - politicalnewsbot
+    networks:
+      - botnet
+  factsonfactsbot:
+    container_name: factsonfactsbot
+    build:
+      - context: ./factsonfactsbot
+    volumes:
+      - ./factsonfactsbot:/factsonfactsbot
+    networks:
+      - botnet
+  newsondemandbot:
+    container_name: newsondemandbot
+    build:
+      - context: ./newsondemandbot
+    volumes:
+      - ./newsondemandbot:/newsondemandbot
+    networks:
+      - botnet
+  politicalnewsbot:
+    container_name: politicalnewsbot
+    build:
+      - context: ./politicalnewsbot
+    volumes:
+      - ./politicalnewsbot:/politicalnewsbot
+    networks:
+      - botnet
+networks:
+  botnet:
+    driver:
+      bridge
