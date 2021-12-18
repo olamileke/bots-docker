@@ -5,12 +5,13 @@ services:
     build:
       context: ./nginx
     volumes:
-      ./factsonfactsbot:/var/www/vhosts/factsonfactsbot
-      ./newsondemandbot:/var/www/vhosts/newsondemandbot
-      ./politicalnewsbot:/var/www/vhosts/politicalnewsbot
-      ./certbot-etc:/etc/letsencrypt
-      ./certbot-var:/var/lib/letsencrypt
-      ./dhparam:/etc/ssl/certs
+      - ./factsonfactsbot:/var/www/vhosts/factsonfactsbot
+      - ./newsondemandbot:/var/www/vhosts/newsondemandbot
+      - ./politicalnewsbot:/var/www/vhosts/politicalnewsbot
+      - ./certbot:/var/www/certbot
+      - ./certbot-etc:/etc/letsencrypt
+      - ./certbot-var:/var/lib/letsencrypt
+      - ./dhparam:/etc/ssl/certs
     ports:
       - "80:80"
       - "443:443"
@@ -44,6 +45,18 @@ services:
       - ./politicalnewsbot:/politicalnewsbot
     networks:
       - botnet
+  # certbot:
+  #   image: certbot/certbot
+  #   container_name: certbot
+  #   volumes:
+  #     - ./certbot:/var/www/certbot
+  #     - ./certbot-etc:/etc/letsencrypt
+  #     - ./certbot-var:/var/lib/letsencrypt
+  #   depends_on:
+  #     - webserver
+  #   networks:
+  #     - botnet
+  #   command: certonly --webroot --webroot-path=/var/www/certbot --email olamileke.dev@gmail.com --agree-tos --no-eff-email --force-renewal -d bots.themilestonesapp.xyz
 networks:
   botnet:
     driver:
