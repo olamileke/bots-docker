@@ -5,19 +5,33 @@ services:
     build:
       context: ./nginx
     volumes:
-      ./factsonfactsbot:/var/www/vhosts/factsonfactsbot
-      ./newsondemandbot:/var/www/vhosts/newsondemandbot
-      ./politicalnewsbot:/var/www/vhosts/politicalnewsbot
-      ./certbot-etc:/etc/letsencrypt
-      ./certbot-var:/var/lib/letsencrypt
-      ./dhparam:/etc/ssl/certs
+      - ./bookble:/var/www/vhosts/bookble
+      - ./factsonfactsbot:/var/www/vhosts/factsonfactsbot
+      - ./newsondemandbot:/var/www/vhosts/newsondemandbot
+      - ./politicalnewsbot:/var/www/vhosts/politicalnewsbot
+      - ./certbot:/var/www/certbot
+      - ./certbot-etc:/etc/letsencrypt
+      - ./certbot-var:/var/lib/letsencrypt
+      - ./dhparam:/etc/ssl/certs
     ports:
       - "80:80"
       - "443:443"
     depends_on:
+     - bookble
      - factsonfactsbot
      - newsondemandbot
      - politicalnewsbot
+    networks:
+      - botnet
+  bookble:
+    container_name: bookble
+    build:
+      context: ./bookble
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./bookble:/usr/src/app
+      - /usr/src/app/node_modules
     networks:
       - botnet
   factsonfactsbot:
@@ -44,6 +58,18 @@ services:
       - ./politicalnewsbot:/politicalnewsbot
     networks:
       - botnet
+  # certbot:
+  #   image: certbot/certbot
+  #   container_name: certbot
+  #   volumes:
+  #     - ./certbot:/var/www/certbot
+  #     - ./certbot-etc:/etc/letsencrypt
+  #     - ./certbot-var:/var/lib/letsencrypt
+  #   depends_on:
+  #     - webserver
+  #   networks:
+  #     - botnet
+  #   command: certonly --webroot --webroot-path=/var/www/certbot --email olamileke.dev@gmail.com --agree-tos --no-eff-email --force-renewal -d bookble.themilestonesapp.xyz
 networks:
   botnet:
     driver:
