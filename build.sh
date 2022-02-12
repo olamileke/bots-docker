@@ -1,6 +1,11 @@
 #!/bin/bash
 
-for app in $*;do
+for app in $*; do
+    if [ ! -d ./$app ]; then
+        echo "$app directory does not exist"
+        continue
+    fi
+    
     cd ./$app
     git checkout master
     git pull
