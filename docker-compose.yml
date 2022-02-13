@@ -6,6 +6,7 @@ services:
       context: ./nginx
     volumes:
       - ./bookble:/var/www/vhosts/bookble
+      - ./trim-api:/var/www/vhosts/trim-api
       - ./factsonfactsbot:/var/www/vhosts/factsonfactsbot
       - ./newsondemandbot:/var/www/vhosts/newsondemandbot
       - ./politicalnewsbot:/var/www/vhosts/politicalnewsbot
@@ -18,10 +19,12 @@ services:
       - "443:443"
     depends_on:
      - bookble
+     - trim-api
      - factsonfactsbot
      - newsondemandbot
      - politicalnewsbot
     networks:
+      - appnet
       - botnet
   bookble:
     container_name: bookble
@@ -32,7 +35,30 @@ services:
       - ./bookble:/usr/src/app
       - /usr/src/app/node_modules
     networks:
-      - botnet
+      - appnet
+  trim-api:
+    container_name: trim-api
+    build:
+      context: ./trim-api
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./trim-api:/app
+    networks:
+      - appnet
+  trim-db:
+    container_name: trim-db
+    image: postgres
+    environment:
+      POSTGRES_USER: olamileke
+      POSTGRES_DB: trim
+      POSTGRES_PASSWORD: 8gKgLoaMB4o4vhDsIEAd
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./trim-db:/var/lib/posgresql/data
+    networks:
+      - appnet
   factsonfactsbot:
     container_name: factsonfactsbot
     build:
@@ -68,8 +94,11 @@ services:
   #     - webserver
   #   networks:
   #     - botnet
-  #   command: certonly --webroot --webroot-path=/var/www/certbot --email olamileke.dev@gmail.com --agree-tos --no-eff-email --force-renewal -d bookble.themilestonesapp.xyz
+  #   command: certonly --webroot --webroot-path=/var/www/certbot --email olamileke.dev@gmail.com --agree-tos --no-eff-email --force-renewal -d trim.api.themilestonesapp.xyz
 networks:
+  appnet:
+    driver:
+      bridge
   botnet:
     driver:
       bridge
