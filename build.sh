@@ -13,6 +13,4 @@ for app in $*; do
     docker-compose build --no-cache $app
 done
 
-docker-compose build --no-cache webserver
-
 docker-compose up -d
