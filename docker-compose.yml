@@ -28,7 +28,8 @@ services:
       - botnet
   bookble:
     container_name: bookble
-    image: olamileke/bookble
+    build:
+      context: ./bookble
     ports:
       - "3000:3000"
     volumes:
