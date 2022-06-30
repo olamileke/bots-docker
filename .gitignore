@@ -1,9 +1,14 @@
+
+# Applications
 /bookble
 /trim-api
 /trim-db
 /factsonfactsbot
 /newsondemandbot
 /politicalnewsbot
+
+# Certbot
 /certbot-etc
 /certbot-var
 /dhparam
+/credentials

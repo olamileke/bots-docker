@@ -84,18 +84,19 @@ services:
       - ./politicalnewsbot:/politicalnewsbot
     networks:
       - botnet
-  # certbot:
-  #   image: certbot/certbot
-  #   container_name: certbot
-  #   volumes:
-  #     - ./certbot:/var/www/certbot
-  #     - ./certbot-etc:/etc/letsencrypt
-  #     - ./certbot-var:/var/lib/letsencrypt
-  #   depends_on:
-  #     - webserver
-  #   networks:
-  #     - botnet
-  #   command: certonly --webroot --webroot-path=/var/www/certbot --email olamileke.dev@gmail.com --agree-tos --no-eff-email --force-renewal -d trim.api.themilestonesapp.xyz
+  certbot:
+    image: certbot/dns-digitalocean
+    container_name: certbot
+    volumes:
+      - ./certbot:/var/www/certbot
+      - ./certbot-etc:/etc/letsencrypt
+      - ./certbot-var:/var/lib/letsencrypt
+      - ./credentials:/credentials
+    depends_on:
+      - webserver
+    networks:
+      - botnet
+    command: sleep 5
 networks:
   appnet:
     driver:
