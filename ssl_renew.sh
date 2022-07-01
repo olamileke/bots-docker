@@ -1,7 +1,10 @@
 #!/bin/bash
 
-cd /home/Olamileke/bots-docker/
+COMPOSE="/usr/local/bin/docker-compose"
+DOCKER="/usr/bin/docker"
 
-docker-compose run certbot renew 
+cd /home/Olamileke/bots-docker/  
 
-docker system prune -af
+$COMPOSE run certbot renew 
+
+$DOCKER system prune -af
