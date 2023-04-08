@@ -5,102 +5,52 @@ services:
     build:
       context: ./nginx
     volumes:
-      - ./bookble:/var/www/vhosts/bookble
-      - ./trim-api:/var/www/vhosts/trim-api
-      - ./factsonfactsbot:/var/www/vhosts/factsonfactsbot
-      - ./newsondemandbot:/var/www/vhosts/newsondemandbot
-      - ./politicalnewsbot:/var/www/vhosts/politicalnewsbot
-      - ./certbot:/var/www/certbot
-      - ./certbot-etc:/etc/letsencrypt
-      - ./certbot-var:/var/lib/letsencrypt
-      - ./dhparam:/etc/ssl/certs
+      - ./certbot/root:/var/www/certbot
+      - ./certbot/etc:/etc/letsencrypt
+      - ./certbot/var:/var/lib/letsencrypt
+      - ./certbot/dhparam:/etc/ssl/certs
     ports:
       - "80:80"
       - "443:443"
     depends_on:
-     - bookble
-     - trim-api
      - factsonfactsbot
      - newsondemandbot
      - politicalnewsbot
     networks:
-      - appnet
       - botnet
-  bookble:
-    container_name: bookble
-    build:
-      context: ./bookble
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./bookble:/usr/src/app
-      - /usr/src/app/node_modules
-    networks:
-      - appnet
-  trim-api:
-    container_name: trim-api
-    build:
-      context: ./trim-api
-    ports:
-      - "5000:5000"
-    volumes:
-      - ./trim-api:/app
-    networks:
-      - appnet
-  trim-db:
-    container_name: trim-db
-    image: postgres
-    environment:
-      POSTGRES_USER: olamileke
-      POSTGRES_DB: trim
-      POSTGRES_PASSWORD: 8gKgLoaMB4o4vhDsIEAd
-    ports:
-      - "5432:5432"
-    volumes:
-      - ./trim-db:/var/lib/posgresql/data
-    networks:
-      - appnet
   factsonfactsbot:
     container_name: factsonfactsbot
-    build:
-      context: ./factsonfactsbot
+    image: olamileke/factsonfactsbot
     volumes:
-      - ./factsonfactsbot:/factsonfactsbot
+      - ./env/factsonfactsbot.env:/factsonfactsbot/.env
     networks:
       - botnet
   newsondemandbot:
     container_name: newsondemandbot
-    build:
-      context: ./newsondemandbot
+    image: olamileke/newsondemandbot
     volumes:
-      - ./newsondemandbot:/newsondemandbot
+      - ./env/newsondemandbot.env:/newsondemandbot/.env
     networks:
       - botnet
   politicalnewsbot:
     container_name: politicalnewsbot
-    build:
-      context: ./politicalnewsbot
+    image: olamileke/politicalnewsbot
     volumes:
-      - ./politicalnewsbot:/politicalnewsbot
+      - ./env/politicalnewsbot.env:/politicalnewsbot/.env
     networks:
       - botnet
-  certbot:
-    image: certbot/dns-digitalocean
-    container_name: certbot
-    volumes:
-      - ./certbot:/var/www/certbot
-      - ./certbot-etc:/etc/letsencrypt
-      - ./certbot-var:/var/lib/letsencrypt
-      - ./credentials:/credentials
-    depends_on:
-      - webserver
-    networks:
-      - botnet
-    command: sleep 5
+  # certbot:
+  #   image: certbot/dns-digitalocean
+  #   container_name: certbot
+  #   volumes:
+  #     - ./certbot/root:/var/www/certbot
+  #     - ./certbot/etc:/etc/letsencrypt
+  #     - ./certbot/var:/var/lib/letsencrypt
+  #     - ./certbot/credentials:/credentials
+  #   command: certonly --dns-digitalocean --dns-digitalocean-credentials /credentials/credentials.ini -d bots.olamileke.dev
+  #   networks:
+  #     - botnet
 networks:
-  appnet:
-    driver:
-      bridge
   botnet:
     driver:
       bridge
